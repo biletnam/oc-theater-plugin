@@ -1,5 +1,6 @@
 <?php namespace Abnmt\Theater\Components;
 
+use Abnmt\TheaterNews\Models\Post as ArticleModel;
 use Abnmt\Theater\Models\Event as EventModel;
 use Abnmt\Theater\Models\Performance as PerformanceModel;
 use Carbon;
@@ -47,7 +48,7 @@ class Events extends ComponentBase
                 'title'       => 'Страница статьи прессы',
                 'description' => 'Шаблон страницы статьи',
                 'type'        => 'dropdown',
-                'default'     => 'theater/news',
+                'default'     => 'theaterNews/post',
                 'group'       => 'Страницы',
             ],
         ];
@@ -146,8 +147,10 @@ class Events extends ComponentBase
 
             // Assign URLs
             extract($params);
-            // if ($post->relation instanceof ArticleModel)
-            //     $post->relation->setUrl($newsPage, $this->controller);
+            if ($post->relation instanceof ArticleModel) {
+                $post->relation->setUrl($newsPage, $this->controller);
+            }
+
             if ($post->relation instanceof PerformanceModel) {
                 $post->relation->setUrl($performancePage, $this->controller);
             }
@@ -158,7 +161,11 @@ class Events extends ComponentBase
             }
 
             // Grouping
-            if ($this->inCollection($post->relation->taxonomy, 'title', 'Детские спектакли')) {
+            CW::info(['relation', $post->relation->taxonomy]);
+
+            $_relation = $post->relation->taxonomy;
+
+            if (!is_null($_relation) && $this->inCollection($_relation, 'title', 'Детские спектакли')) {
                 $this->group['child'][] = $post;
             } else {
                 $this->group['normal'][] = $post;
