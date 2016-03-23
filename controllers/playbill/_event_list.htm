@@ -1,0 +1,48 @@
+<? foreach ($json as $month => $days) : ?>
+
+    <h1><?= date_create($month)->format("F") ?></h1>
+
+    <table class="table data" data-control="rowlink">
+        <thead>
+            <tr>
+                <th><a href="javascript:;" style="width: 50px">ID</a></th>
+                <th style="width: 100px"><span>Дата</span></th>
+                <th><a href="javascript:;">Название (Билетер)</a></th>
+                <th style="width: 50px"><span>Действие</span></th>
+                <th><a href="javascript:;">Сопоставление (Театр)</a></th>
+            </tr>
+        </thead>
+
+        <tbody id="event_list">
+
+            <? foreach ($days as $day => $events) : ?>
+                <? foreach ($events as $key => $event) : ?>
+
+                    <tr>
+                        <td class="bileter_id">
+                            <a href="<?= $event['IdPerformance'] ?>"><?= $event['IdPerformance'] ?></a>
+                        </td>
+                        <td class="event_date">
+                            <?= date_create($event['PerfDate'])->format("d") ?>
+                        </td>
+                        <td class="name">
+                            <?= $event['Name'] ?>
+                        </td>
+                        <td class="action">
+                            <button
+                                type="button"
+                                data-request="onSync"
+                                class="btn btn-default btn-sm btn-info">
+                                →
+                            </button>
+                        </td>
+                        <td class="relation"></td>
+                    </tr>
+
+                <? endforeach ?>
+            <? endforeach ?>
+
+        </tbody>
+    </table>
+
+<? endforeach ?>

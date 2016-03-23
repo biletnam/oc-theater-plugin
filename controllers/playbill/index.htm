@@ -1,28 +1,48 @@
-<div class="toolbar-widget list-header" id="Toolbar-listToolbar">
-    <div class="control-toolbar">
-        <!-- Control Panel -->
-        <div class="toolbar-item toolbar-primary">
-            <div data-control="toolbar" data-disposable="">
-                <button
-                    type="button"
-                    data-request="onTest"
-                    class="btn btn-default oc-icon-plus btn-primary">
-                    Fetch events!
-                </button>
+<?php if ($this->fatalError): ?>
+
+    <h1>Error!</h1>
+
+<?php else : ?>
+
+    <div class="toolbar-widget list-header" id="Toolbar-listToolbar">
+        <div class="control-toolbar">
+            <!-- Control Panel -->
+            <div class="toolbar-item toolbar-primary">
+                <div data-control="toolbar" data-disposable="">
+                    <button
+                        type="button"
+                        data-request="onTest"
+                        class="btn btn-default oc-icon-plus btn-primary">
+                        Получить афишу
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="control-list list-unresponsive">
-    <table class="table data" data-control="rowlink">
-        <thead>
-            <tr>
-                <th style="width: 150px"><span>Date</span></th>
-                <th><a href="javascript:;">Name</a></th>
-                <th style="width: 150px"><span>Action</span></th>
-            </tr>
-        </thead>
-        <tbody id="result"></tbody>
-    </table>
-</div>
+
+    <div class="callout fade in callout-success">
+        <div class="content">
+            <p>Запрос: <a href="<?= $request ?>"><?= $request ?></a></p>
+        </div>
+    </div>
+
+    <div id="messages"></div>
+    <div class="control-breadcrumb" style="color:white; margin-top: 5em;"><h2 style="margin: 0; font-size: 22px;">Билетер</h2></div>
+    <div class="control-list list-unresponsive event-list" id="events-changed">
+        <?= $this->makePartial('events_changed', ['data' => $changed]) ?>
+    </div>
+
+    <div class="control-breadcrumb" style="color:white; margin-top: 5em;"><h2 style="margin: 0; font-size: 22px;">Афиша</h2></div>
+    <div class="control-list list-unresponsive event-list" id="events-saved">
+        <?= $this->makePartial('events_saved', ['data' => $saved]) ?>
+    </div>
+
+    <div id="loading">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+    </div>
+
+<?php endif ?>

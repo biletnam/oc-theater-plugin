@@ -155,15 +155,15 @@ class Events extends ComponentBase
                 $post->relation->setUrl($performancePage, $this->controller);
             }
 
+            $_relation = $post->relation->taxonomy;
+
             $date = Carbon::parse($post->event_date);
-            if ($active != 'active' && $date->gte($active)) {
+            if (!is_null($_relation) && !$this->inCollection($_relation, 'title', 'Детские спектакли') && $active != 'active' && $date->gte($active)) {
                 $post->active = $active = 'active';
             }
 
             // Grouping
-            CW::info(['relation', $post->relation->taxonomy]);
-
-            $_relation = $post->relation->taxonomy;
+            // CW::info(['relation', $post->relation->taxonomy]);
 
             if (!is_null($_relation) && $this->inCollection($_relation, 'title', 'Детские спектакли')) {
                 $this->group['child'][] = $post;
