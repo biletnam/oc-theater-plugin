@@ -182,7 +182,7 @@ class Playbill extends Controller
                 'title'       => $relation ? $relation->title : null,
                 'description' => $relation ? $relation->description : null,
             ];
-            $model = EventModel::make($event);
+            $event = EventModel::make($event);
         }
 
         $event['title']       = $relation ? $relation->title : null;
