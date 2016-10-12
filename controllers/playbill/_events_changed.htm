@@ -1,0 +1,121 @@
+<?php if ($data) : ?>
+
+    <?php foreach ($data as $month => $days) : ?>
+
+        <h3><?= date_create($month)->format('F') ?></h3>
+
+        <table class="table data" data-control="rowlink">
+            <thead>
+                <tr>
+                    <th style="width: 50px"><a href="javascript:;">ID</a></th>
+                    <th style="width: 100px"><span>Дата</span></th>
+                    <th style="width: 50%"><a href="javascript:;">Название (Билетер)</a></th>
+                    <th style="width: 50px"><span>Действие</span></th>
+                    <th style="width: 50%"><a href="javascript:;">Название (Театр)</a></th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <?php foreach ($days as $day => $events) : ?>
+                    <?php foreach ($events as $key => $event) : ?>
+
+                        <tr>
+                            <td class="bileter-id">
+                                <?= $event['bileter_id'] ?>
+                            </td>
+                            <td class="event-date">
+                                <?= $event['event_date']->format('d') ?>
+                            </td>
+                            <td class="event-title">
+                                <?= $event['title'] ?>
+                            </td>
+
+                            <?php if ($event['status'] == 'new'): ?>
+                                <td class="action" id="js<?= $event['bileter_id'] ?>">
+                                    <button
+                                        type="button"
+                                        data-request="onSync"
+                                        data-request-loading="#loading"
+                                        data-request-data="
+                                            bileter_id:'<?= $event['bileter_id'] ?>',
+                                            event_date:'<?= $event['event_date']->format('Y-m-d H:i')?>',
+                                            relation_id:'<?= $event['relation']['id'] ?>',
+                                            status:'<?= $event['status'] ?>'
+                                        "
+                                        class="btn btn-lg btn-success icon-plus">
+                                    </button>
+                                </td>
+                                <td class="relation">
+                                    <?= $event['relation']['title'] ?>
+                                </td>
+
+                            <?php elseif ($event['status'] == 'changed') : ?>
+                                <td class="action" id="js<?= $event['bileter_id'] ?>">
+                                    <button
+                                        type="button"
+                                        data-request="onSync"
+                                        data-request-loading="#loading"
+                                        data-request-data="
+                                            bileter_id:'<?= $event['bileter_id'] ?>',
+                                            event_date:'<?= $event['event_date']->format('Y-m-d H:i')?>',
+                                            relation_id:'<?= $event['relation']['id'] ?>',
+                                            status:'<?= $event['status'] ?>'
+                                        "
+                                        class="btn btn-lg btn-warning icon-refresh">
+                                    </button>
+                                </td>
+                                <td class="relation">
+                                    <?= $event['relation']['title'] ?>
+                                    (замена: <em><?= $event['search']['relation']['title'] ?></em>)
+                                </td>
+
+                            <?php elseif ($event['status'] == 'wrong_name') : ?>
+                                <td class="action" id="js<?= $event['bileter_id'] ?>">
+                                    <button
+                                        type="button"
+                                        data-request="onSync"
+                                        data-request-loading="#loading"
+                                        data-request-data="
+                                            bileter_id:'<?= $event['bileter_id'] ?>',
+                                            event_date:'<?= $event['event_date']->format('Y-m-d H:i')?>',
+                                            relation_id:'<?= $event['relation']['id'] ?>',
+                                            status:'<?= $event['status'] ?>'
+                                        "
+                                        class="btn btn-lg btn-warning icon-arrow-right">
+                                    </button>
+                                </td>
+                                <td class="relation">
+                                    <?= $event['relation']['title'] ?>
+                                </td>
+
+                            <?php elseif ($event['status'] == 'wrong') : ?>
+                                <td class="action" id="js<?= $event['bileter_id'] ?>">
+                                    <button
+                                        type="button"
+                                        data-request="onSync"
+                                        data-request-loading="#loading"
+                                        data-request-data="
+                                            bileter_id:'<?= $event['bileter_id'] ?>',
+                                            event_date:'<?= $event['event_date']->format('Y-m-d H:i')?>',
+                                            relation_id:'<?= $event['relation']['id'] ?>',
+                                            status:'<?= $event['status'] ?>'
+                                        "
+                                        class="btn btn-lg btn-danger icon-exclamation-triangle">
+                                    </button>
+                                </td>
+                                <td class="relation"></td>
+
+                            <?php endif ?>
+
+                        </tr>
+
+                    <?php endforeach ?>
+                <?php endforeach ?>
+
+            </tbody>
+        </table>
+
+    <?php endforeach ?>
+
+<?php endif ?>

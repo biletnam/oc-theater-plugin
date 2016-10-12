@@ -4,6 +4,7 @@ use Abnmt\Theater\Plugin as Plugin;
 use Carbon;
 use Cms\Classes\Page as CmsPage;
 use Cms\Classes\Theme;
+use CW;
 use Model;
 use Str;
 
@@ -26,12 +27,12 @@ class Event extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = [];
+    protected $fillable = ['title', 'description', 'event_date', 'bileter_id'];
 
     /**
      * @var array With fields
      */
-    protected $with = ['relation'];
+    // protected $with = ['relation'];
 
     /**
      * @var array Relations
@@ -214,6 +215,7 @@ class Event extends Model
             }
         }
 
+        CW::info('Before Query Get');
         return $query->get();
     }
 

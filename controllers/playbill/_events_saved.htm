@@ -1,0 +1,47 @@
+<? foreach ($data as $month => $days) : ?>
+
+    <h3><?= date_create($month)->format('F') ?></h3>
+
+    <table class="table data" data-control="rowlink">
+        <thead>
+            <tr>
+                <th style="width: 50px"><a href="javascript:;">ID</a></th>
+                <th style="width: 100px"><span>Дата</span></th>
+                <th><a href="javascript:;">Название</a></th>
+                <th style="width: 100px"><a href="javascript:;">Действие</a></th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <? foreach ($days as $day => $events) : ?>
+                <? foreach ($events as $key => $event) : ?>
+
+                    <tr>
+                        <td class="bileter-id">
+                            <!-- <a href="<?= $event['bileter_id'] ?>"><?= $event['bileter_id'] ?></a> -->
+                            <?= $event['bileter_id'] ?>
+                        </td>
+                        <td class="event-date">
+                            <?= date_create($event['event_date'])->format('d') ?>
+                            <small><?= date_create($event['event_date'])->format('D') ?></small>
+                        </td>
+                        <td class="event-title">
+                            <?= $event['title'] ?>
+                        </td>
+                        <td class="action">
+                            <button
+                                type="button"
+                                data-request="onSync"
+                                class="btn btn-large btn-info icon-spinner">
+                            </button>
+                        </td>
+                    </tr>
+
+                <? endforeach ?>
+            <? endforeach ?>
+
+        </tbody>
+    </table>
+
+<? endforeach ?>
