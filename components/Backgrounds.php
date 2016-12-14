@@ -70,7 +70,7 @@ class Backgrounds extends ComponentBase
         $params = $this->params;
         $layout = Background::whereSlug($params['layout'])->with('images')->first();
 
-        if (count($layout->images) == 0) {
+        if (is_null($layout) || count($layout->images) == 0) {
             return;
         }
 

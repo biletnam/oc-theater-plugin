@@ -1,6 +1,6 @@
 <?php namespace Abnmt\Theater\Components;
 
-use Abnmt\TheaterNews\Models\Post as ArticleModel;
+use Abnmt\TheaterNews\Models\Post as PostModel;
 use Abnmt\Theater\Models\Event as EventModel;
 use Abnmt\Theater\Models\Performance as PerformanceModel;
 use Carbon;
@@ -137,7 +137,9 @@ class Events extends ComponentBase
         /*
          * List all posts
          */
-        $posts = EventModel::listFrontEnd($params);
+        CW::info('Before loading Events');
+        $posts = EventModel::with('relation')->listFrontEnd($params);
+        CW::info(['After loading Events' => $posts]);
 
         /*
          * Prepare for View
@@ -147,15 +149,19 @@ class Events extends ComponentBase
 
             // Assign URLs
             extract($params);
-            if ($post->relation instanceof ArticleModel) {
+            if ($post->relation instanceof PostModel) {
+                CW::info(['News' => $post]);
                 $post->relation->setUrl($newsPage, $this->controller);
             }
 
             if ($post->relation instanceof PerformanceModel) {
+                CW::info(['Performance' => $post]);
                 $post->relation->setUrl($performancePage, $this->controller);
             }
 
+            CW::info('Before loading Taxonomy');
             $_relation = $post->relation->taxonomy;
+            CW::info(['Taxonomy Relation' => $_relation]);
 
             $date = Carbon::parse($post->event_date);
             if (!is_null($_relation) && !$this->inCollection($_relation, 'title', 'Детские спектакли') && $active != 'active' && $date->gte($active)) {
