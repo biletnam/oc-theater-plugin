@@ -56,7 +56,7 @@ class Backgrounds extends ComponentBase
     {
         $this->params = $this->getProperties();
 
-
+    }
     /**
      * @return null
      */
@@ -139,7 +139,9 @@ class Backgrounds extends ComponentBase
                         // $styles[$query][$class_name] = array_merge($_rules, ['params' => $meta_params], ['position' => $position], ['sizes' => $sizes]);
                         // $styles[$query][$_meta['class_name']] = array_merge($_rules, $_meta);
                         $_styles = array_merge($_rules, $_meta);
-
+                        // CW::info(['Compute' => $_styles]);
+                        $styles[] = $this->computeParams($_styles);
+                    }
 
                 }
             }
@@ -204,6 +206,8 @@ class Backgrounds extends ComponentBase
 
                     // If rule don't consist height, skip rule
                     // if (!array_key_exists('height', $item)) {
+                    //     // CW::info($value);
+                    //     continue;
                     // }
 
                     $_item        = [];
@@ -235,9 +239,12 @@ class Backgrounds extends ComponentBase
                     $return[$query . 'px'][$item['class_name']] = $item;
 
                 }
+            }
 
         }
 
+        // CW::info(['Process' => $return]);
+        return $return;
     }
 
     protected $temp = [];
@@ -262,8 +269,12 @@ class Backgrounds extends ComponentBase
         if ($item['common_rules']['visibility'] == 'hidden') {
 
             if (array_key_exists('reposition', $temp)) {
+                // CW::info('Reposition');
+                return;
             }
 
+            // CW::info(['Hidden' => $item]);
+            return $item;
 
         }
 
@@ -353,6 +364,8 @@ class Backgrounds extends ComponentBase
                 }
                 if ($position != 'none' && $meta['position'] == 'none') {
                     foreach ($return as $key => $item) {
+                        // CW::info($item);
+                        if ($item['class_name'] == $meta['class_name']) {
                             unset($return[$key]);
                         }
                     }
@@ -485,6 +498,8 @@ class Backgrounds extends ComponentBase
                                             $temp[$q] = $this->rules_temp[$position][$q];
                                         }
 
+                                        // CW::info([$_q . ' ' . $_c . ' ' . $_p . ' ' . $q, $_merge[$q], $_ret['rules'], array_replace($_merge[$q], $_ret['rules'])]);
+                                        $_merge[$q] = array_replace($_merge[$q], $_ret['rules']);
                                         $_merge[$q] = $this->rules_temp[$position][$q] = array_replace($temp[$q], $_merge[$q]);
                                     }
 
@@ -493,7 +508,6 @@ class Backgrounds extends ComponentBase
                         }
 
                     }
-
 
                     $return[] = $_merge;
                 }
