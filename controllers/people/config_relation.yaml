@@ -33,3 +33,108 @@
 
 # meta:
 #     label: Дополнительные данные
+
+participation:
+    label: "Роль"
+    view:
+        toolbarButtons: create|delete
+        list:
+            columns:
+                performance:
+                    label: Спектакль
+                    relation: performance
+                    select: title
+                title:
+                    label: Имя
+                type:
+                    label: Тип
+                group:
+                    label: Группа
+    manage:
+        list:
+            columns:
+                performance:
+                    label: Спектакль
+                    relation: performance
+                    select: title
+                title:
+                    label: Имя
+                type:
+                    label: Тип
+                group:
+                    label: Группа
+        form:
+            fields:
+                performance:
+                    label: Спектакль
+                    type: relation
+                    nameFrom: title
+                title:
+                    label: Роли
+                    type: taglist
+                    options: listRoles
+                    # separator: "/"
+                type:
+                    label: Тип
+                    type: dropdown
+                    options:
+                        roles: Актеры
+                        creators: Создатели
+                group:
+                    label: Группа
+                    type: taglist
+                    options: listGroups
+
+
+# participation:
+#     label: "Участник"
+#     view:
+#         toolbarButtons: create|delete
+#         list:
+#             columns:
+#                 person:
+#                     label: Имя
+#                     relation: person
+#                     select: concat(family_name, ', ', 'given_name')
+#                 title:
+#                     label: Роли
+#                 type:
+#                     label: Тип
+#                 group:
+#                     label: Группа
+#     manage:
+#         list:
+#             columns:
+#                 person:
+#                     label: Имя
+#                     relation: person
+#                     select: concat(family_name, ', ', 'given_name')
+#                 title:
+#                     label: Роли
+#                 type:
+#                     label: Тип
+#                 group:
+#                     label: Группа
+#         form:
+#             fields:
+#                 person:
+#                     label: Имя
+#                     type: relation
+#                     select: concat(family_name, ', ', 'given_name')
+#                     # nameFrom: family_name
+#                 title:
+#                     label: Роли
+#                     type: taglist
+#                     options: listRoles
+#                     # separator: "/"
+#                 type:
+#                     label: Тип
+#                     type: dropdown
+#                     options:
+#                         roles: Актеры
+#                         creators: Создатели
+#                 group:
+#                     label: Группа
+#                     type: taglist
+#                     options: listGroups
+

@@ -6,7 +6,6 @@ use Abnmt\Theater\Models\Performance as PerformanceModel;
 use Carbon;
 use Cms\Classes\ComponentBase;
 use Cms\Classes\Page;
-use CW;
 
 class Events extends ComponentBase
 {
@@ -126,7 +125,6 @@ class Events extends ComponentBase
     {
         $this->params = $this->getProperties();
 
-        // CW::info($this->params);
     }
 
     protected function listPosts()
@@ -137,9 +135,7 @@ class Events extends ComponentBase
         /*
          * List all posts
          */
-        CW::info('Before loading Events');
         $posts = EventModel::with('relation')->listFrontEnd($params);
-        CW::info(['After loading Events' => $posts]);
 
         /*
          * Prepare for View
@@ -150,18 +146,14 @@ class Events extends ComponentBase
             // Assign URLs
             extract($params);
             if ($post->relation instanceof PostModel) {
-                CW::info(['News' => $post]);
                 $post->relation->setUrl($newsPage, $this->controller);
             }
 
             if ($post->relation instanceof PerformanceModel) {
-                CW::info(['Performance' => $post]);
                 $post->relation->setUrl($performancePage, $this->controller);
             }
 
-            CW::info('Before loading Taxonomy');
             $_relation = $post->relation->taxonomy;
-            CW::info(['Taxonomy Relation' => $_relation]);
 
             $date = Carbon::parse($post->event_date);
             if (!is_null($_relation) && !$this->inCollection($_relation, 'title', 'Детские спектакли') && $active != 'active' && $date->gte($active)) {
@@ -169,7 +161,6 @@ class Events extends ComponentBase
             }
 
             // Grouping
-            // CW::info(['relation', $post->relation->taxonomy]);
 
             if (!is_null($_relation) && $this->inCollection($_relation, 'title', 'Детские спектакли')) {
                 $this->group['child'][] = $post;
@@ -179,8 +170,6 @@ class Events extends ComponentBase
 
         });
 
-        // CW::info($this->group);
-        CW::info(['Events' => $posts]);
         return $posts;
     }
 

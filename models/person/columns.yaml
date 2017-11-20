@@ -3,6 +3,9 @@
 # ===================================
 
 columns:
+    id:
+        label: ID
+        sortable: true
     portrait:
         label: Портрет
         type: partial

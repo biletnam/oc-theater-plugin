@@ -1,1 +1,11 @@
-<button type="button" class="btn btn-lg btn-danger icon-exclamation"></button>
+<button
+	type="button"
+	data-request="onAddEmptyEvent"
+	data-request-loading="#loading"
+	data-request-data="
+		bileter_id:'<?= $bileter_id ?>',
+		bileter_title:'<?= $bileter_title ?>',
+		event_date:'<?= $event_date->format('Y-m-d H:i')?>'
+	"
+	class="btn btn-lg btn-danger icon-plus">
+</button>

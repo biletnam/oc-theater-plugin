@@ -1,20 +1,11 @@
 <?php namespace Abnmt\Theater\Components;
 
+use Abnmt\Theater\Models\Article as ArticleModel;
+use Abnmt\Theater\Models\Performance as PerformanceModel;
+use Abnmt\Theater\Models\Person as PersonModel;
 use Cms\Classes\ComponentBase;
-
 use Cms\Classes\Page;
-use Cms\Classes\Content;
-
 use Request;
-
-// use Abnmt\Theater\Models\Event         as EventModel;
-use Abnmt\Theater\Models\Article       as ArticleModel;
-use Abnmt\Theater\Models\Performance   as PerformanceModel;
-use Abnmt\Theater\Models\Person        as PersonModel;
-use Abnmt\Theater\Models\Taxonomy      as TaxonomyModel;
-// use Abnmt\Theater\Models\Participation as ParticipationModel;
-
-use \Clockwork\Support\Laravel\Facade as CW;
 
 class Theater extends ComponentBase
 {
@@ -23,32 +14,32 @@ class Theater extends ComponentBase
     {
         return [
             'name'        => 'Театр',
-            'description' => 'Компонент для вывода Театральных данных'
+            'description' => 'Компонент для вывода Театральных данных',
         ];
     }
 
     public function defineProperties()
     {
         return [
-            'type' => [
+            'type'            => [
                 'title'       => 'Тип',
                 'description' => 'Выводит записи с выбранным типом',
                 'type'        => 'dropdown',
-                'default'     => 'person'
+                'default'     => 'person',
             ],
-            'categories' => [
+            'categories'      => [
                 'title'       => 'Категории',
                 'description' => 'Выводит записи выбранных категории',
                 'type'        => 'dropdown',
                 'depends'     => ['type'],
             ],
-            'sort' => [
+            'sort'            => [
                 'title'       => 'Сортировка',
                 'description' => 'Сортирует список записей',
                 'type'        => 'dropdown',
                 'depends'     => ['type'],
             ],
-            'scopes' => [
+            'scopes'          => [
                 'title'       => 'Наборы',
                 'description' => 'Загружает для записей дополнительные наборы данных',
                 'type'        => 'dropdown',
@@ -61,28 +52,35 @@ class Theater extends ComponentBase
                 'default'     => 'theater/performance',
                 'group'       => 'Страницы',
             ],
-            'personPage' => [
+            'personPage'      => [
                 'title'       => 'Страница персоналии',
                 'description' => 'Шаблон страницы персоналии',
                 'type'        => 'dropdown',
                 'default'     => 'theater/person',
                 'group'       => 'Страницы',
             ],
-            'articlePage' => [
+            'postPage'        => [
+                'title'       => 'Страница новости',
+                'description' => 'Шаблон страницы новости',
+                'type'        => 'dropdown',
+                'default'     => 'theaterNews/post',
+                'group'       => 'Страницы',
+            ],
+            'articlePage'     => [
                 'title'       => 'Страница статьи',
                 'description' => 'Шаблон страницы статьи',
                 'type'        => 'dropdown',
                 'default'     => 'theater/article',
                 'group'       => 'Страницы',
             ],
-            'pageNumber' => [
-                'title'             => 'Номер страницы',
-                'description'       => 'Переменная с номером страницы',
-                'type'              => 'string',
-                'default'           => '{{ :page }}',
-                'group'             => 'Пагинация',
+            'pageNumber'      => [
+                'title'       => 'Номер страницы',
+                'description' => 'Переменная с номером страницы',
+                'type'        => 'string',
+                'default'     => '{{ :page }}',
+                'group'       => 'Пагинация',
             ],
-            'postsPerPage' => [
+            'postsPerPage'    => [
                 'title'             => 'Количество записей на страницу',
                 'description'       => 'Переменная с количеством записей на страницу',
                 'type'              => 'string',
@@ -102,6 +100,10 @@ class Theater extends ComponentBase
     {
         return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
     }
+    public function getPostPageOptions()
+    {
+        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+    }
     public function getArticlePageOptions()
     {
         return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
@@ -113,16 +115,15 @@ class Theater extends ComponentBase
             'person'      => 'Люди',
             'performance' => 'Спектакли',
             'article'     => 'Статьи',
-            // 'event'       => 'Афиша',
         ];
         return $options;
     }
 
     public function getCategoriesOptions()
     {
-        $type = Request::input('type');
+        $type    = Request::input('type');
         $options = [
-            'person' => [
+            'person'      => [
                 '{{ :category }}' => 'Из URL',
                 'actor'           => 'Актёры',
                 'cooperate'       => 'Приглашенные артисты',
@@ -134,43 +135,34 @@ class Theater extends ComponentBase
                 'child'           => 'Детские спектакли',
                 'archived'        => 'Архивные спектакли',
             ],
-            'article' => [
+            'article'     => [
                 '{{ :category }}' => 'Из URL',
                 'news'            => 'Новости',
                 'press'           => 'Пресса',
                 'journal'         => 'Журнал',
             ],
-            // 'event' => [
-            //     '{{ :category }}' => 'Из URL',
-            //     'now'             => 'На текущий месяц',
-            //     'next'            => 'На следующий месяц',
-            //     'performance'     => 'Спектакль',
-            //     'concert'         => 'Концерт',
-            // ],
         ];
         return $options[$type];
     }
 
     public function getSortOptions()
     {
-        $type = Request::input('type');
+        $type    = Request::input('type');
         $options = [
             'person'      => PersonModel::$allowedSortingOptions,
             'performance' => PerformanceModel::$allowedSortingOptions,
             'article'     => ArticleModel::$allowedSortingOptions,
-            // 'event'       => EventModel::$allowedSortingOptions,
         ];
         return $options[$type];
     }
 
     public function getScopesOptions()
     {
-        $type = Request::input('type');
+        $type    = Request::input('type');
         $options = [
             'person'      => PersonModel::$allowedScopingOptions,
             'performance' => PerformanceModel::$allowedScopingOptions,
             'article'     => ArticleModel::$allowedScopingOptions,
-            // 'event'       => EventModel::$allowedScopingOptions,
         ];
         return $options[$type];
     }
@@ -180,12 +172,6 @@ class Theater extends ComponentBase
      * @var array
      */
     public $params;
-
-    /**
-     * A Post object
-     * @var Model
-     */
-    // public $post;
 
     /**
      * A Post slug
@@ -206,17 +192,10 @@ class Theater extends ComponentBase
     public $posts;
 
     /**
-     * If the post list should be filtered by a category, the model to use.
-     * @var Model
-     */
-    // public $category;
-
-    /**
      * Parameter to use for the page number
      * @var string
      */
     public $pageParam;
-
 
     /**
      *  onRun function
@@ -227,20 +206,10 @@ class Theater extends ComponentBase
 
         $this->posts = $this->page['posts'] = $this->listPosts();
 
-        if ($this->slug = $this->param('slug'))
+        if ($this->slug = $this->param('slug')) {
             $this->post = $this->page['post'] = $this->loadPost();
+        }
 
-
-
-        /*
-         * If the page number is not valid, redirect
-         */
-        // if ($pageNumberParam = $this->paramName('pageNumber')) {
-        //     $currentPage = $this->property('pageNumber');
-
-        //     if ($currentPage > ($lastPage = $this->posts->lastPage()) && $currentPage > 1)
-        //         return Redirect::to($this->currentPageUrl([$pageNumberParam => $lastPage]));
-        // }
     }
 
     /**
@@ -248,14 +217,13 @@ class Theater extends ComponentBase
      */
     protected function prepareVars()
     {
-        $this->params            = $this->getProperties();
+        $this->params = $this->getProperties();
 
-        $this->pageParam         = $this->page['pageParam'] = $this->paramName('pageNumber');
+        $this->pageParam         = $this->page['pageParam']         = $this->paramName('pageNumber');
         $this->params['page']    = $this->property('pageNumber');
         $this->params['perPage'] = $this->property('postsPerPage');
 
-        $this->params['slug']    = $this->param('slug');
-        // CW::info($this->params);
+        $this->params['slug'] = $this->param('slug');
     }
 
     protected function listPosts()
@@ -265,19 +233,17 @@ class Theater extends ComponentBase
 
         $model = "Abnmt\\Theater\\Models\\" . ucfirst($type);
 
-        /*
+        /**
          * List all posts
          */
         $posts = $model::listFrontEnd($this->params);
 
-        $page = $type . 'Page';
+        $page           = $type . 'Page';
         $this->postPage = $$page;
 
-        $posts->each(function($post) {
+        $posts->each(function ($post) {
             $post->setUrl($this->postPage, $this->controller);
         });
-
-        // CW::info($posts);
 
         return $posts;
     }
@@ -289,12 +255,10 @@ class Theater extends ComponentBase
 
         $model = "Abnmt\\Theater\\Models\\" . ucfirst($type);
 
-        /*
+        /**
          * Load the posts
          */
         $post = $model::LoadPost($this->params);
-
-        // CW::info($post);
 
         return $post;
     }

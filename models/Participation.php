@@ -39,4 +39,14 @@ class Participation extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+
+    public function listRoles($keyValue = null, $fieldName = null){
+        return $this->all()->filter(function($item){return $item->title;})->unique('title')->lists('title', 'title');
+        // return $this->all()->unique('group')->filter()->lists('group', 'group');
+    }
+    public function listGroups($keyValue = null, $fieldName = null){
+        return $this->all()->filter(function($item){return $item->group;})->unique('group')->lists('group', 'group');
+        // return $this->all()->unique('group')->filter()->lists('group', 'group');
+    }
+
 }

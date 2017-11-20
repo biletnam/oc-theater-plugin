@@ -2,8 +2,6 @@
 
 use Abnmt\Theater\Models\Performance as PerformanceModel;
 use Cms\Classes\ComponentBase;
-// use Laravelrus\LocalizedCarbon\LocalizedCarbon as Carbon;
-use \Clockwork\Support\Laravel\Facade as CW;
 
 class Performance extends ComponentBase
 {
@@ -64,14 +62,11 @@ class Performance extends ComponentBase
         if ($this->slug = $this->param('slug')) {
             $this->post = $this->page['post'] = $this->loadPost();
         }
-
-        // $this->page['roles'] = $this->roles;
-
     }
 
     protected function prepareVars()
     {
-        // $this->categoryFilter = $this->param('category');
+        $this->params = $this->getProperties();
     }
 
     protected function loadPost()
@@ -82,13 +77,15 @@ class Performance extends ComponentBase
             ->first()
         ;
 
-        /*
-         * Add a "URL" helper attribute for linking to each performance and person press
-         */
-
         $this->roles         = [];
         $this->participation = [];
 
+        $this->creators_group = [];
+        $this->roles_group    = [];
+
+        /**
+         * Add a "URL" helper attribute for linking to each performance and person press
+         */
         $post->participation->each(function ($role) {
             $role->person->setUrl($this->personPage, $this->controller);
 
@@ -104,15 +101,43 @@ class Performance extends ComponentBase
             $this->participation[$role['title']]['persons'][]   = $role->person;
         });
 
+        $roles_by_group = $post->participation
+            ->groupBy('type')
+            ->map(function ($type) {
+                return $type
+                    ->groupBy(function ($role) {
+                        // if ($role->group == null) {
+                        //     return "none";
+                        // }
+                        return $role->group ?: 'none';
+                    })
+                    ->map(function ($group) {
+                        return $group_of_roles = $group
+                            ->groupBy('title')
+                            ->map(function ($role) {
+                                if ($role->count() == 1) {
+                                    return ['person' => $role->pluck('person')->first()];
+                                }
+                                return ['persons' => $role->pluck('person')];
+                            })
+                        ;
+                        // $return = $group_of_roles
+                        //     ->map(function($role))
+                        // ;
+                        // return $return;
+                    })
+                ;
+            })
+        ;
+
         $post->press->each(function ($press) {
             $press->setUrl($this->pressPage, $this->controller);
         });
 
         // ROLES
-        $post->roles    = $this->roles;
-        $post->roles_ng = $this->participation;
-
-        CW::info(['Performance' => $post]);
+        $post->roles_by_group = $roles_by_group;
+        $post->roles          = $this->roles;
+        $post->roles_ng       = $this->participation;
 
         return $post;
     }

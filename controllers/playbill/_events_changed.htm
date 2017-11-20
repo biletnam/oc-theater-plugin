@@ -10,7 +10,7 @@
                     <th style="width: 50px"><a href="javascript:;">ID</a></th>
                     <th style="width: 100px"><span>Дата</span></th>
                     <th style="width: 50%"><a href="javascript:;">Название (Билетер)</a></th>
-                    <th style="width: 50px"><span>Действие</span></th>
+                    <th style="width: 136px"><span>Действие</span></th>
                     <th style="width: 50%"><a href="javascript:;">Название (Театр)</a></th>
                 </tr>
             </thead>
@@ -39,6 +39,7 @@
                                         data-request-loading="#loading"
                                         data-request-data="
                                             bileter_id:'<?= $event['bileter_id'] ?>',
+                                            bileter_title:'<?= $event['title'] ?>',
                                             event_date:'<?= $event['event_date']->format('Y-m-d H:i')?>',
                                             relation_id:'<?= $event['relation']['id'] ?>',
                                             status:'<?= $event['status'] ?>'
@@ -58,6 +59,7 @@
                                         data-request-loading="#loading"
                                         data-request-data="
                                             bileter_id:'<?= $event['bileter_id'] ?>',
+                                            bileter_title:'<?= $event['title'] ?>',
                                             event_date:'<?= $event['event_date']->format('Y-m-d H:i')?>',
                                             relation_id:'<?= $event['relation']['id'] ?>',
                                             status:'<?= $event['status'] ?>'
@@ -78,6 +80,7 @@
                                         data-request-loading="#loading"
                                         data-request-data="
                                             bileter_id:'<?= $event['bileter_id'] ?>',
+                                            bileter_title:'<?= $event['title'] ?>',
                                             event_date:'<?= $event['event_date']->format('Y-m-d H:i')?>',
                                             relation_id:'<?= $event['relation']['id'] ?>',
                                             status:'<?= $event['status'] ?>'
@@ -97,6 +100,7 @@
                                         data-request-loading="#loading"
                                         data-request-data="
                                             bileter_id:'<?= $event['bileter_id'] ?>',
+                                            bileter_title:'<?= $event['title'] ?>',
                                             event_date:'<?= $event['event_date']->format('Y-m-d H:i')?>',
                                             relation_id:'<?= $event['relation']['id'] ?>',
                                             status:'<?= $event['status'] ?>'

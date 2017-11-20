@@ -4,7 +4,6 @@ use Abnmt\Theater\Plugin as Plugin;
 use Carbon;
 use Cms\Classes\Page as CmsPage;
 use Cms\Classes\Theme;
-use CW;
 use Model;
 use Str;
 
@@ -215,7 +214,6 @@ class Event extends Model
             }
         }
 
-        CW::info('Before Query Get');
         return $query->get();
     }
 
@@ -284,12 +282,9 @@ class Event extends Model
             $date         = Carbon::parse('now');
             $lastDateInDb = Carbon::parse(self::max('event_date'));
 
-            // CW::info(['last' => $lastDateInDb]);
-
             if (preg_match('~/afisha/\d+-\d+~', $url)) {
                 $slug      = explode('/', $url);
                 $slug_date = Carbon::parse(array_pop($slug))->startOfMonth();
-                // CW::info(['slug' => $slug]);
                 if ($slug_date->lt($date->startOfMonth())) {
                     $result['items'][] = [
                         'title'    => Plugin::dateLocale($slug_date->format('Y-m'), '%B %Y'),
@@ -303,8 +298,6 @@ class Event extends Model
             $counts = self::Date($date->format('Y-m'))->count();
 
             while ($i <= $limit) {
-
-                // CW::info(['date' => $date, 'counts' => $counts]);
 
                 $reference = [
                     'title' => Plugin::dateLocale($date->format('Y-m'), '%B'),
@@ -328,8 +321,6 @@ class Event extends Model
             }
 
         }
-        // CW::info(['url' => $url]);
-        // CW::info(['result' => $result]);
 
         return $result;
     }

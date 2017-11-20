@@ -52,6 +52,23 @@ class Taxonomy extends Model
 
 
 
+    public function scopeFilterByModel($query, $model)
+    {
+        $query->where('model', $model);
+        return $query;
+    }
+    
+    public function scopeForPerformances($query)
+    {
+        $query->where('model', '=', 'Abnmt\Theater\Models\Performance');
+        return $query;
+    }
+    public function scopeForPersons($query)
+    {
+        $query->where('model', '=', 'Abnmt\Theater\Models\Person');
+        return $query;
+    }
+    
     public function scopeListTaxonomies($query, $model)
     {
         $query->where('model', $model);

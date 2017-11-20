@@ -98,16 +98,11 @@ class Plugin extends PluginBase
 
     public function boot()
     {
-        // App::register( 'Laravelrus\LocalizedCarbon\LocalizedCarbonServiceProvider' );
-
         $alias = AliasLoader::getInstance();
-        // $alias->alias( 'LocalizedCarbon', 'Laravelrus\LocalizedCarbon\LocalizedCarbon' );
-        // $alias->alias( 'DiffFormatter'  , 'Laravelrus\LocalizedCarbon\DiffFactoryFacade' );
 
         $alias->alias('Carbon', '\Carbon\Carbon');
-        $alias->alias('CW', '\Clockwork\Support\Laravel\Facade');
 
-        /*
+        /**
          * Register menu items for the RainLab.Pages plugin
          */
         Event::listen('pages.menuitem.listTypes', function () {
