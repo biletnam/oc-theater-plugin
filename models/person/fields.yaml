@@ -60,10 +60,11 @@ tabs:
             label: Галерея
             type: fileupload
 
-        # participation:
-        #     tab: Занятость в спектаклях
-        #     type: relation
-        #     # path: $/abnmt/theater/models/person/_list_participation.htm
+        participation:
+            tab: Занятость в спектаклях
+            # type: relation
+            type: partial
+            path: $/abnmt/theater/models/person/_list_participation.htm
 
         # press:
         #     label: Пресса
@@ -78,3 +79,10 @@ tabs:
         #     tab: Категории
         #     type: partial
         #     path: $/abnmt/theater/models/person/_list_categories.htm
+            
+        taxonomy:
+            tab: Meta
+            label: Категории
+            type: relation
+            nameFrom: title
+            scope: forPersons

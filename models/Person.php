@@ -6,7 +6,6 @@ use Cms\Classes\Theme;
 use Model;
 use Str;
 use URL;
-use \Clockwork\Support\Laravel\Facade as CW;
 
 /**
  * Person Model
@@ -152,7 +151,6 @@ class Person extends Model
     {
         $categories = TaxonomyModel::where('model', get_class())->select('id', 'title', 'slug')->get();
 
-        CW::info($categories);
         return $categories;
     }
 
@@ -343,8 +341,6 @@ class Person extends Model
     {
         $result = null;
 
-        // CW::info($item);
-
         if ($item->type == 'troupe') {
             if (!$item->reference || !$item->cmsPage) {
                 return;
@@ -357,8 +353,6 @@ class Person extends Model
             $posts = self::ByCategory($item->reference)
                 ->select('title', 'slug')
                 ->get();
-
-            // CW::info($posts);
 
             $posts->each(function ($post) {
                 $post->url = CmsPage::url('theater/person', ['slug' => $post->slug]);
@@ -377,7 +371,6 @@ class Person extends Model
             $result['isActive'] = $pageUrl == $url || in_array($url, $postUrls);
             // $result['mtime'] = $category->updated_at;
         }
-        // CW::info($result);
         return $result;
     }
 

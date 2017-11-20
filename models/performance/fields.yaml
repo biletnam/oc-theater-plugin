@@ -148,11 +148,12 @@ tabs:
         #     type: partial
         #     path: $/abnmt/theater/models/performance/_list_categories.htm
 
-        # roles:
-        #     tab: Актеры и Создатели
-        #     # type: relation
-        #     type: partial
-        #     # nameFrom: title
+        participation:
+            tab: Актеры и Создатели
+            # type: relation
+            type: partial
+            path: $/abnmt/theater/models/performance/_list_participation.htm
+            # nameFrom: title
 
 
 
@@ -181,6 +182,13 @@ tabs:
             label: Премьера
             type: switch
             default: false
+            
+        taxonomy:
+            tab: Meta
+            label: Категории
+            type: relation
+            nameFrom: title
+            scope: forPerformances
 
         meta[video]:
             tab: Meta

@@ -362,7 +362,6 @@ class Performance extends Model
     {
         $categories = TaxonomyModel::where('model', get_class())->select('id', 'title', 'slug')->get();
 
-        // CW::info($categories);
         return $categories;
     }
 
@@ -427,8 +426,6 @@ class Performance extends Model
     {
         $result = null;
 
-        // CW::info($item);
-
         if ($item->type == 'repertoire') {
             if (!$item->reference || !$item->cmsPage) {
                 return;
@@ -441,8 +438,6 @@ class Performance extends Model
             $posts = self::ByCategories($item->reference)
                 ->select('title', 'slug')
                 ->get();
-
-            // CW::info($posts);
 
             $posts->each(function ($post) {
                 $post->url = CmsPage::url('theater/performance', ['slug' => $post->slug]);
@@ -461,7 +456,6 @@ class Performance extends Model
             $result['isActive'] = $pageUrl == $url || in_array($url, $postUrls);
             // $result['mtime'] = $category->updated_at;
         }
-        // CW::info($result);
         return $result;
     }
 

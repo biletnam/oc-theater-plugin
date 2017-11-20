@@ -45,7 +45,6 @@ class Background extends Model
 
     public function listImages($keyValue = null, $fieldName = null)
     {
-        // CW::info(['Model' => $this->images]);
         return $this->images->lists('file_name', 'file_name');
     }
 

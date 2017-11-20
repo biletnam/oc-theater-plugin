@@ -3,7 +3,6 @@
 use Abnmt\Theater\Models\Event as EventModel;
 use Abnmt\Theater\Models\Performance as PerformanceModel;
 use Backend\Classes\Controller;
-use \Clockwork\Support\Laravel\Facade as CW;
 
 /**
  * Playbill Back-end Controller
@@ -30,7 +29,7 @@ class Playbill extends Controller
 
         $now  = new \DateTime;
         $from = $now->format('Y-m-d');
-        $to   = date("Y-m-d", strtotime("+2 month"));
+        $to   = date("Y-m-d", strtotime("+4 month"));
 
         $url = "http://komedianty.apit.bileter.ru/d98a3e8ab87ecd3721a78a273bd9146a/afisha/?from=" . $from . "&to=" . $to . "&json=true";
 
@@ -85,6 +84,7 @@ class Playbill extends Controller
                         "Не всякий вор - грабитель"                       => "Не всякий вор — грабитель",
                         " В Париж !"                                                    => "В Париж!",
                         "Брысь! Или истории кота Филофея"           => "Брысь! или Истории кота Филофея",
+                        "На чистую воду"                                          => "На чистую воду или Самая счастливая семья",
                     ];
                     if (array_key_exists($title, $exclusion)) {
                         $title = $exclusion[$title];
@@ -145,6 +145,36 @@ class Playbill extends Controller
 
     }
 
+    public function onAddEmptyEvent()
+    {
+        extract($post = post());
+
+        $event = EventModel::where('event_date', $event_date)->where('bileter_id', $bileter_id)->first();
+
+        if (!$event) {
+            $event = [
+                'bileter_id'  => $bileter_id,
+                'event_date'  => $event_date,
+                'relation'    => null,
+                'title'       => $bileter_title,
+                'description' => null,
+            ];
+            $event = EventModel::create($event);
+        }
+
+        if (!$event) {
+            return [
+                '#messages'         => $this->makePartial('message', ['type' => 'warning', 'message' => 'Ошибка!']),
+                '#js' . $bileter_id => $this->makePartial('button_error', ['bileter_id' => $bileter_id, 'event_date' => new \DateTime($event_date), 'bileter_title' => $bileter_title]),
+            ];
+        }
+
+        return [
+            '#messages'         => $this->makePartial('message', ['type' => 'success', 'message' => 'ОК']),
+            '#js' . $bileter_id => $this->makePartial('button_edit', ['event' => $event]),
+        ];
+    }
+
     public function onSync()
     {
         extract($post = post());
@@ -154,7 +184,7 @@ class Playbill extends Controller
         if (!$result) {
             return [
                 '#messages'         => $this->makePartial('message', ['type' => 'warning', 'message' => 'Для мероприятия не найден спектакль!']),
-                '#js' . $bileter_id => $this->makePartial('button_error'),
+                '#js' . $bileter_id => $this->makePartial('button_error', ['bileter_id' => $bileter_id, 'event_date' => new \DateTime($event_date), 'bileter_title' => $bileter_title]),
             ];
         }
 
@@ -229,8 +259,6 @@ class Playbill extends Controller
         // }
 
         $result['model'] = $model;
-
-        CW::info(['Model' => $model]);
 
         if (is_null($search)) {
 
